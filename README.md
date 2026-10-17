@@ -1,0 +1,1 @@
+SciSilentBench is a pilot benchmark of 25 silent physical bugs in scientific Python. It evaluates whether coding agents can fix code that passes visible tests but violates hidden physics oracles. This repository contains the mutator, the evaluation harness, and the results from the Gemma 4 Developer Agent Paper Track.
