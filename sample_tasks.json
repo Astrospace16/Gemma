@@ -1,0 +1,22 @@
+[
+  {
+    "task_id": "LK-042",
+    "repo": "lightkurve",
+    "bug_type": "TIME_SCALE",
+    "prompt": "Fix or verify `compute_barycentric_phase` so that input Astropy Time objects are properly phase-folded around `t0_jd` in Barycentric Dynamical Time.",
+    "mutated_code": "import numpy as np\nfrom astropy.time import Time\n\ndef compute_barycentric_phase(time_obj: Time, period_days: float, t0_tdb_jd: float) -> np.ndarray:\n    dt = time_obj.utc.jd - t0_tdb_jd\n    return dt % period_days / period_days",
+    "clean_code": "import numpy as np\nfrom astropy.time import Time\n\ndef compute_barycentric_phase(time_obj: Time, period_days: float, t0_tdb_jd: float) -> np.ndarray:\n    # Must evaluate in TDB scale to prevent UTC leap-second / Romer drift\n    dt = time_obj.tdb.jd - t0_tdb_jd\n    return (dt % period_days) / period_days\n",
+    "visible_test": "t = Time(['2020-01-01T00:00:00', '2020-01-02T00:00:00'], format='isot', scale='utc')\nphases = compute_barycentric_phase(t, period_days=2.0, t0_tdb_jd=t.tdb.jd[0])\nassert phases.shape == (2,)\nassert np.all((phases >= 0.0) & (phases <= 1.0))\n",
+    "hidden_oracle": "t = Time(['2020-01-01T00:00:00', '2020-06-01T00:00:00'], format='isot', scale='utc')\np = compute_barycentric_phase(t, period_days=1.5, t0_tdb_jd=2458849.5)\nexpected = ((t.tdb.jd - 2458849.5) % 1.5) / 1.5\nassert np.allclose(p, expected, atol=1e-9), f'Time scale drift detected: {p} vs {expected}'\n"
+  },
+  {
+    "task_id": "AP-017",
+    "repo": "astropy",
+    "bug_type": "RAD_DEG",
+    "prompt": "Ensure `small_angle_separation` accurately computes angular separation in radians given right ascension and declination offsets in degrees.",
+    "mutated_code": "import numpy as np\n\ndef angular_sep_rad(dra_deg: float, ddec_deg: float, dec_deg: float) -> float:\n    dra = dra_deg * np.cos(np.deg2rad(dec_deg))\n    ddec = np.deg2rad(ddec_deg)\n    return float(np.hypot(dra, ddec))",
+    "clean_code": "import numpy as np\n\ndef angular_sep_rad(dra_deg: float, ddec_deg: float, dec_deg: float) -> float:\n    dra = np.deg2rad(dra_deg) * np.cos(np.deg2rad(dec_deg))\n    ddec = np.deg2rad(ddec_deg)\n    return float(np.hypot(dra, ddec))\n",
+    "visible_test": "# Developers only tested zero offset and positivity!\nassert angular_sep_rad(0.0, 0.0, 0.0) == 0.0\nassert angular_sep_rad(1.0, 1.0, 0.0) > 0.0\n",
+    "hidden_oracle": "res = angular_sep_rad(1.0, 0.0, 60.0)\nexpected = np.deg2rad(1.0) * 0.5\nassert np.isclose(res, expected, rtol=1e-7), f'Radians/Degrees mismatch: {res} vs {expected}'\n"
+  }
+]

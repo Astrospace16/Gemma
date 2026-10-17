@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "TFR (%)": 0.0,
+    "SFR (%)": 100.0,
+    "Abstention (%)": 0.0,
+    "AUROC": 0.5,
+    "ECE": 1.0,
+    "Mean Tokens": 2823.0,
+    "Mean Time (s)": 244.43
+  },
+  "details": [
+    {
+      "task_id": "LK-042",
+      "final_code": "import numpy as np\nfrom astropy.time import Time\n\ndef compute_barycentric_phase(time_obj: Time, period_days: float, t0_tdb_jd: float) -> np.ndarray:\n    \"\"\"\n    Computes the barycentric phase of a time object relative to a reference time.\n    \"\"\"\n    # Calculate the time difference in Julian Dates\n    dt = time_obj.jd - t0_tdb_jd\n    \n    # Phase fold the difference around the period\n    return dt % period_days / period_days",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2099,
+      "wall_time_s": 192.5725154876709,
+      "turns": 2,
+      "vis_pass": true,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": true,
+      "abstained": false
+    },
+    {
+      "task_id": "AP-017",
+      "final_code": "import numpy as np\n\ndef angular_sep_rad(dra_deg: float, ddec_deg: float, dec_deg: float) -> float:\n    \"\"\"\n    Computes the angular separation in radians between two points,\n    assuming dec_deg is the declination of the first point and ddec_deg is the difference in declination.\n    dra_deg is the difference in right ascension.\n    Uses the spherical law of cosines.\n    \"\"\"\n    # Convert degrees to radians\n    dec_rad = np.deg2rad(dec_deg)\n    ddec_rad = np.deg2rad(ddec_deg)\n    dra_rad = np.deg2rad(dra_deg)\n\n    # Define the declinations\n    delta_1 = dec_rad\n    delta_2 = dec_rad + ddec_rad\n\n    # Spherical law of cosines: cos(theta) = sin(d1)sin(d2) + cos(d1)cos(d2)cos(d_alpha)\n    sin_delta_1 = np.sin(delta_1)\n    sin_delta_2 = np.sin(delta_2)\n    cos_delta_1 = np.cos(delta_1)\n    cos_delta_2 = np.cos(delta_2)\n    \n    cos_theta = sin_delta_1 * sin_delta_2 + cos_delta_1 * cos_delta_2 * np.cos(dra_rad)\n    \n    # Clamp cos_theta to [-1, 1] to prevent domain errors in arccos due to floating point inaccuracies\n    cos_theta = np.clip(cos_theta, -1.0, 1.0)\n    \n    theta = np.arccos(cos_theta)\n    return float(theta)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 3547,
+      "wall_time_s": 296.27792286872864,
+      "turns": 2,
+      "vis_pass": true,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": true,
+      "abstained": false
+    }
+  ]
+}

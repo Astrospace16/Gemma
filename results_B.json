@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "TFR (%)": 0.0,
+    "SFR (%)": 0.0,
+    "Abstention (%)": 100.0,
+    "AUROC": 0.5,
+    "ECE": 0.0,
+    "Mean Tokens": 1348.0,
+    "Mean Time (s)": 260.68
+  },
+  "details": [
+    {
+      "task_id": "LK-042",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 2696,
+      "wall_time_s": 282.25553345680237,
+      "turns": 1,
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "AP-017",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent runtime error: InternalServerError: litellm.InternalServerError: Ollama_chatException - {\"error\":\"llama-server returned invalid tool call arguments for \\\"run_python\\\": unexpected end of JSON input\"}",
+      "tokens": 0,
+      "wall_time_s": 239.1139781475067,
+      "turns": 1,
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    }
+  ]
+}

@@ -1,0 +1,601 @@
+{
+  "summary": {
+    "TFR (%)": 20.0,
+    "SFR (%)": 0.0,
+    "Abstention (%)": 80.0,
+    "AUROC": 1.0,
+    "ECE": 0.0,
+    "Mean Tokens": 943.3,
+    "Mean Time (s)": 151.71
+  },
+  "by_bug_type": {
+    "FRAME": {
+      "TFR (%)": 0.0,
+      "SFR (%)": 0.0,
+      "Abstention (%)": 100.0,
+      "AUROC": 0.5,
+      "ECE": 0.0,
+      "Mean Tokens": 0.0,
+      "Mean Time (s)": 180.0
+    },
+    "JD_MJD": {
+      "TFR (%)": 50.0,
+      "SFR (%)": 0.0,
+      "Abstention (%)": 50.0,
+      "AUROC": 1.0,
+      "ECE": 0.0,
+      "Mean Tokens": 1130.5,
+      "Mean Time (s)": 159.8
+    },
+    "RAD_DEG": {
+      "TFR (%)": 27.27,
+      "SFR (%)": 0.0,
+      "Abstention (%)": 72.73,
+      "AUROC": 1.0,
+      "ECE": 0.0,
+      "Mean Tokens": 1533.1,
+      "Mean Time (s)": 142.03
+    },
+    "TIME_SCALE": {
+      "TFR (%)": 0.0,
+      "SFR (%)": 0.0,
+      "Abstention (%)": 100.0,
+      "AUROC": 0.5,
+      "ECE": 0.0,
+      "Mean Tokens": 0.0,
+      "Mean Time (s)": 180.0
+    },
+    "UNIT": {
+      "TFR (%)": 0.0,
+      "SFR (%)": 0.0,
+      "Abstention (%)": 100.0,
+      "AUROC": 0.5,
+      "ECE": 0.0,
+      "Mean Tokens": 549.2,
+      "Mean Time (s)": 127.8
+    }
+  },
+  "details": [
+    {
+      "task_id": "LK-042",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "TIME_SCALE",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "AP-017",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-001",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 2321,
+      "wall_time_s": 172.86078310012817,
+      "turns": 3,
+      "raw_agent_output": "The user wants me to fix a bug in a Python function `orbital_inclination_rad` located in `scientific_examples/orbital_inclination_rad.py`.\nThis function is supposed to convert an orbital inclination from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(inclination_deg)\n```\n\nThe task prompt is: \"Convert an orbital inclination from degrees to radians.\"\n\nThe current implementation simply returns the input value, which is incorrect for a degree-to-radian conversion.\n\nThe conversion formula is: $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$.\n\nSince `numpy` is imported, I should use `numpy.deg2rad` or perform the calculation using `np.pi`.\n\nUsing `np.deg2rad` is the most idiomatic way when `numpy` is available.\n\nLet's check the visible test:\n`assert orbital_inclination_rad(30.0) > 0.0`\n\nIf I use the buggy code:\n`orbital_inclination_rad(30.0)` returns `30.0`. `30.0 > 0.0` is True. The visible test passes, but the function is logically incorrect according to the task prompt.\n\nI must fix the function to perform the conversion correctly.\n\nCorrect implementation using `numpy`:\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(np.deg2rad(inclination_deg))\n```\nOr, if I want to avoid `np.deg2rad` and stick to basic math, I can use `np.pi`:\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(inclination_deg * np.pi / 180.0)\n```\nSince `numpy` is already imported, using `np.deg2rad` is cleaner.\n\nI will use `np.deg2rad`.\n\nLet's construct the final corrected code.\n\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(np.deg2rad(inclination_deg))\n```\n\nI will use the `check_visible_test` tool to verify this fix before submitting the patch.\nThe user wants me to fix a silent physical bug in a scientific Python file.\nThe file is `scientific_examples/orbital_inclination_rad.py`.\nThe function `orbital_inclination_rad` is supposed to convert an orbital inclination from degrees to radians.\n\nBuggy source code:\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(inclination_deg)\n```\nThe current implementation just returns the input value, which is incorrect for a degree-to-radian conversion.\n\nThe visible test is:\n`assert orbital_inclination_rad(30.0) > 0.0`\n\nI tested a potential fix:\n```python\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(np.deg2rad(inclination_deg))\n```\nThe visible test passed with this code.\n\nThe conversion from degrees to radians is $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$. `numpy.deg2rad()` performs this conversion correctly.\n\nThe fix is to use `np.deg2rad(inclination_deg)` instead of just returning `inclination_deg`.\n\nI will use the corrected code to submit the patch.\nimport numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(np.deg2rad(inclination_deg))",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef orbital_inclination_rad(inclination_deg: float) -> float:\n    return float(np.deg2rad(inclination_deg))"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-002",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 1112,
+      "wall_time_s": 89.50833511352539,
+      "turns": 1,
+      "raw_agent_output": "The user wants me to fix a bug in `scientific_examples/detector_roll_rad.py`.\nThe function `detector_roll_rad` is supposed to convert an angle from degrees to radians.\nThe current implementation simply returns the input value: `return float(roll_deg)`.\n\nThe input `roll_deg` is in degrees, and the output should be in radians.\n\nThe conversion formula is: $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$.\n\nI need to use `numpy` (which is imported) or `math` (if I were to import it, but `numpy` is available) to perform this conversion.\n\nLet's check the existing imports. Only `import numpy as np` is present.\n\nI will use `np.deg2rad()` or implement the formula using `np.pi`. Using `np.deg2rad()` is the most idiomatic way with numpy.\n\nOriginal code:\n```python\nimport numpy as np\n\ndef detector_roll_rad(roll_deg: float) -> float:\n    return float(roll_deg)\n```\n\nCorrected code should be:\n```python\nimport numpy as np\n\ndef detector_roll_rad(roll_deg: float) -> float:\n    return float(np.deg2rad(roll_deg))\n```\nSince `np.deg2rad` returns a numpy float type, casting it to `float()` ensures the return type matches the type hint, although often unnecessary in modern Python/NumPy usage, it adheres strictly to the original structure.\n\nLet's verify the fix against the visible test: `assert detector_roll_rad(42.5) > 0.0`.\nIf `roll_deg = 42.5`, then `np.deg2rad(42.5)` will be a positive number, so the test should pass.\n\nI will construct the complete corrected file and use `check_visible_test`.\nimport numpy as np\n\ndef detector_roll_rad(roll_deg: float) -> float:\n    return float(np.deg2rad(roll_deg))",
+      "tool_calls": [],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-003",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 2308,
+      "wall_time_s": 162.38707065582275,
+      "turns": 3,
+      "raw_agent_output": "The user wants me to fix a bug in `scientific_examples/polarization_axis_rad.py`.\nThe function `polarization_axis_rad` is supposed to convert an angle from degrees to radians.\nThe current implementation simply returns the input value: `return float(axis_deg)`.\n\nThe conversion formula from degrees to radians is: $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$.\n\nI need to modify the function to perform this conversion using `numpy` (which is imported).\n\nThe input `axis_deg` is a float representing degrees. The output must be a float representing radians.\n\nLet's check the implementation details.\n\nBuggy code:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return float(axis_deg)\n```\n\nCorrect implementation should be:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return axis_deg * (np.pi / 180.0)\n```\nSince `axis_deg` is a float, the result will naturally be a float. I can simplify the return statement slightly, but ensuring the calculation is correct is key.\n\nI will use `np.deg2rad(axis_deg)` if available, as it is the standard way in numpy, or implement the formula directly. Since `numpy` is imported, `np.deg2rad` is the most idiomatic solution.\n\nLet's use `np.deg2rad`.\n\nCorrected code:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return float(np.deg2rad(axis_deg))\n```\nOr simply:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return np.deg2rad(axis_deg)\n```\nSince `np.deg2rad` returns a numpy float type, casting it to `float()` might be safer if the type hint strictly requires a standard Python float, but usually, in scientific Python, this is fine. I will stick to the most direct fix using `np.deg2rad`.\n\nI will use the complete corrected source code and run the visible test.\n\nThe complete corrected file content:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return np.deg2rad(axis_deg)\n```\nThe user wants me to fix a silent physical bug in a scientific Python file.\nThe file is `scientific_examples/polarization_axis_rad.py`.\nThe function `polarization_axis_rad` is supposed to convert an angle from degrees to radians.\n\nBuggy source:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return float(axis_deg)\n```\nThe current implementation just returns the input angle without conversion.\n\nTask prompt: Convert a polarization analyzer axis from degrees to radians.\n\nVisible test:\n```python\nassert polarization_axis_rad(67.0) > 0.0\n```\nThis test only checks that the output is positive, which is true for any positive input angle, so it doesn't verify the conversion itself.\n\nI used `check_visible_test` with my proposed fix:\n```python\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return np.deg2rad(axis_deg)\n```\nThe test passed.\n\nThe physical/unit error is that the function was returning the angle in degrees instead of converting it to radians, which is required by the task description.\n\nThe correct fix is to use `numpy.deg2rad()` for the conversion.\n\nI will now submit the corrected code.\nimport numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return np.deg2rad(axis_deg)",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef polarization_axis_rad(axis_deg: float) -> float:\n    return np.deg2rad(axis_deg)"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-004",
+      "final_code": "import numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2275,
+      "wall_time_s": 152.35153198242188,
+      "turns": 4,
+      "raw_agent_output": "The user wants me to fix a bug in the function `seismic_azimuth_rad` in `scientific_examples/seismic_azimuth_rad.py`.\nThe function is supposed to convert an azimuth from degrees to radians.\nThe current implementation simply returns the input value: `return float(azimuth_deg)`.\n\nThe conversion from degrees to radians is done by multiplying the degree value by $\\pi/180$.\n\nI need to use `numpy` for $\\pi$ or implement the conversion using standard math functions. Since `numpy` is already imported, I should use it.\n\nThe buggy code is:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(azimuth_deg)\n```\n\nThe corrected code should be:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)\n```\nAlternatively, using the formula:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return azimuth_deg * (np.pi / 180.0)\n```\nUsing `np.deg2rad` is cleaner and idiomatic when `numpy` is available.\n\nLet's check the visible test: `assert seismic_azimuth_rad(123.0) > 0.0`.\nIf `azimuth_deg = 123.0`, then `np.deg2rad(123.0)` will be a positive number, which satisfies the test.\n\nI will use `np.deg2rad` for the fix.\n\nThe complete corrected file will be:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)\n```\n\nI will now use `check_visible_test` to verify the fix before submitting the patch.\nThe user wants me to fix a function `seismic_azimuth_rad` in `scientific_examples/seismic_azimuth_rad.py`.\nThis function is supposed to convert an azimuth from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(azimuth_deg)\n```\nThis code simply returns the input degree value as a float, which is incorrect for conversion to radians.\n\nThe task prompt explicitly states: \"Convert a seismic source azimuth from degrees to radians.\"\n\nI need to use `numpy` for the conversion, as `numpy` is already imported. The function `np.deg2rad()` performs this conversion.\n\nMy proposed fix is:\n```python\nimport numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)\n```\n\nI already ran `check_visible_test` with this proposed fix, and it passed.\n\nThe visible test is:\n`assert seismic_azimuth_rad(123.0) > 0.0`\n\nIf I use `np.deg2rad(123.0)`, the result is positive, so the test passes.\n\nI am confident in this fix as it directly addresses the physical/unit error (degrees vs radians) using the standard library function for this conversion.\n\nI will now submit the patch.",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)"
+          }
+        },
+        {
+          "name": "submit_patch",
+          "args": {
+            "confidence": 1,
+            "final_code": "import numpy as np\n\ndef seismic_azimuth_rad(azimuth_deg: float) -> float:\n    return np.deg2rad(azimuth_deg)"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": true,
+      "oracle_pass": true,
+      "true_fix": true,
+      "silent_failure": false,
+      "abstained": false
+    },
+    {
+      "task_id": "ANG-005",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-006",
+      "final_code": "import numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2310,
+      "wall_time_s": 161.7084412574768,
+      "turns": 4,
+      "raw_agent_output": "The user wants me to fix a bug in the function `spherical_latitude_rad` in `scientific_examples/spherical_latitude_rad.py`.\nThis function is supposed to convert a geodetic latitude from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return float(latitude_deg)\n```\n\nThe visible test is:\n```python\nassert spherical_latitude_rad(51.25) > 0.0\n```\n\nThe current implementation simply returns the input latitude in degrees, which is incorrect for a conversion to radians.\n\nThe conversion formula from degrees to radians is:\n$$ \\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180} $$\n\nI need to use `numpy` (which is imported) or `math` (if I were to import it, but `numpy` is available) to perform this conversion. Since `numpy` is already imported, I should use it.\n\nThe corrected function should be:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)\n```\nAlternatively, using the formula:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return float(latitude_deg * np.pi / 180.0)\n```\nUsing `np.deg2rad` is cleaner and idiomatic when `numpy` is available.\n\nLet's check the visible test with the proposed fix.\nInput: `51.25` degrees.\nExpected output (in radians): $51.25 \\times \\frac{\\pi}{180} \\approx 0.89535$ radians.\nThe test asserts `spherical_latitude_rad(51.25) > 0.0`. Since $0.89535 > 0.0$, the test passes.\n\nI will use `np.deg2rad` for the fix.\n\nThe complete corrected file will be:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)\n```\n\nI will now use `check_visible_test` to verify the fix before submitting the patch.\nThe user wants me to fix a function `spherical_latitude_rad` in `scientific_examples/spherical_latitude_rad.py`.\nThis function is supposed to convert a geodetic latitude from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return float(latitude_deg)\n```\nThis code simply returns the input latitude in degrees, which is incorrect for conversion to radians.\n\nThe task prompt is: \"Convert a geodetic latitude from degrees to radians.\"\n\nI need to use `numpy` (which is imported) to perform the conversion. The function `np.deg2rad()` is the standard way to do this.\n\nMy proposed fix is:\n```python\nimport numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)\n```\n\nI already ran `check_visible_test` with this proposed fix, and it passed.\n\nThe visible test is:\n`assert spherical_latitude_rad(51.25) > 0.0`\n\nIf I use `np.deg2rad(51.25)`, the result will be positive, satisfying the test.\n\nI will now submit this corrected code.",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)"
+          }
+        },
+        {
+          "name": "submit_patch",
+          "args": {
+            "confidence": 1,
+            "final_code": "import numpy as np\n\ndef spherical_latitude_rad(latitude_deg: float) -> float:\n    return np.deg2rad(latitude_deg)"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": true,
+      "oracle_pass": true,
+      "true_fix": true,
+      "silent_failure": false,
+      "abstained": false
+    },
+    {
+      "task_id": "ANG-007",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 1115,
+      "wall_time_s": 94.96269607543945,
+      "turns": 1,
+      "raw_agent_output": "The user wants me to fix a bug in a Python function `beam_pointing_rad` located in `scientific_examples/beam_pointing_rad.py`.\nThis function is supposed to convert a telescope beam pointing offset from degrees to radians.\n\nThe current buggy implementation is:\n```python\nimport numpy as np\n\ndef beam_pointing_rad(pointing_deg: float) -> float:\n    return float(pointing_deg)\n```\nIt currently just returns the input value unchanged, which is incorrect for a degree-to-radian conversion.\n\nThe conversion formula from degrees to radians is:\n$$ \\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180} $$\n\nI need to use `numpy` (which is imported) or `math` (if I were to import it, but `numpy` is available) to perform this conversion. Since `numpy` is already imported, I should use it.\n\nThe corrected implementation should be:\n```python\nimport numpy as np\n\ndef beam_pointing_rad(pointing_deg: float) -> float:\n    return pointing_deg * (np.pi / 180.0)\n```\nOr, using `np.deg2rad` if available, which is cleaner:\n```python\nimport numpy as np\n\ndef beam_pointing_rad(pointing_deg: float) -> float:\n    return np.deg2rad(pointing_deg)\n```\nSince the input is a float, `np.deg2rad` will return a float, satisfying the type hint.\n\nLet's check the visible test: `assert beam_pointing_rad(2.75) > 0.0`.\nIf I use `np.deg2rad(2.75)`, the result will be positive, so the test should pass.\n\nI will use `np.deg2rad` as it is the standard numpy way for this conversion.\n\nI will now construct the final corrected code and use `check_visible_test`.\nimport numpy as np\n\ndef beam_pointing_rad(pointing_deg: float) -> float:\n    return np.deg2rad(pointing_deg)",
+      "tool_calls": [],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-008",
+      "final_code": "import numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return np.deg2rad(initial_angle_deg)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2154,
+      "wall_time_s": 145.7419352531433,
+      "turns": 4,
+      "raw_agent_output": "The user wants me to fix a bug in the function `pendulum_initial_angle_rad` in `scientific_examples/pendulum_initial_angle_rad.py`.\nThis function is supposed to convert an angle from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return float(initial_angle_deg)\n```\n\nThe task prompt is: \"Convert a pendulum's initial displacement angle from degrees to radians.\"\n\nThe visible test is:\n`assert pendulum_initial_angle_rad(18.0) > 0.0`\n\nThe current implementation simply returns the input angle unchanged, which is incorrect for a degree-to-radian conversion.\n\nThe conversion formula is: $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$.\n\nSince `numpy` is imported, I should use `np.deg2rad()` or implement the formula using `np.pi`. Using `np.deg2rad()` is the most idiomatic way when `numpy` is available.\n\nLet's check the implementation using `np.deg2rad()`.\n\nOriginal line:\n`return float(initial_angle_deg)`\n\nCorrected line should be:\n`return np.deg2rad(initial_angle_deg)`\n\nI will replace the function body with the correct conversion.\n\nThe complete corrected file should be:\n```python\nimport numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return np.deg2rad(initial_angle_deg)\n```\n\nI will use `check_visible_test` to verify this fix before submitting the patch.\nThe user wants me to fix a function `pendulum_initial_angle_rad` in `scientific_examples/pendulum_initial_angle_rad.py`.\nThis function is supposed to convert an initial angle from degrees to radians.\n\nBuggy source:\n```python\nimport numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return float(initial_angle_deg)\n```\nThe current implementation just returns the input angle unchanged, which is incorrect for a degree-to-radian conversion.\n\nThe visible test is:\n`assert pendulum_initial_angle_rad(18.0) > 0.0`\n\nI used `check_visible_test` with the proposed fix:\n```python\nimport numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return np.deg2rad(initial_angle_deg)\n```\nThe test passed.\n\nThe physical/unit error was that the function was performing an identity operation instead of the required unit conversion (degrees to radians).\n\nI will now submit the corrected code.",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return np.deg2rad(initial_angle_deg)"
+          }
+        },
+        {
+          "name": "submit_patch",
+          "args": {
+            "confidence": 1,
+            "final_code": "import numpy as np\n\ndef pendulum_initial_angle_rad(initial_angle_deg: float) -> float:\n    return np.deg2rad(initial_angle_deg)"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": true,
+      "oracle_pass": true,
+      "true_fix": true,
+      "silent_failure": false,
+      "abstained": false
+    },
+    {
+      "task_id": "ANG-009",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 1076,
+      "wall_time_s": 80.16690731048584,
+      "turns": 1,
+      "raw_agent_output": "The user wants me to fix a bug in the function `gyroscope_yaw_rad` in `scientific_examples/gyroscope_yaw_rad.py`.\nThe function is supposed to convert a yaw measurement from degrees to radians.\nThe current implementation is:\n```python\nimport numpy as np\n\ndef gyroscope_yaw_rad(yaw_deg: float) -> float:\n    return float(yaw_deg)\n```\nThis implementation simply returns the input value without conversion.\n\nThe conversion from degrees to radians is done by multiplying the degree value by $\\frac{\\pi}{180}$.\n\nI need to use `numpy` for $\\pi$ or use `math.radians` if I import `math`. Since `numpy` is already imported, I can use `np.pi`.\n\nThe corrected function should be:\n```python\nimport numpy as np\n\ndef gyroscope_yaw_rad(yaw_deg: float) -> float:\n    return yaw_deg * (np.pi / 180.0)\n```\n\nLet's check the visible test: `assert gyroscope_yaw_rad(271.0) > 0.0`.\nIf `yaw_deg = 271.0`:\n`271.0 * (np.pi / 180.0)`\nSince $271.0 > 0$ and $\\pi/180.0 > 0$, the result will be positive. The test should pass.\n\nI will construct the complete corrected file and use `check_visible_test`.\n\nCorrected code:\n```python\nimport numpy as np\n\ndef gyroscope_yaw_rad(yaw_deg: float) -> float:\n    return yaw_deg * (np.pi / 180.0)\n```\nimport numpy as np\n\ndef gyroscope_yaw_rad(yaw_deg: float) -> float:\n    return yaw_deg * (np.pi / 180.0)",
+      "tool_calls": [],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "ANG-010",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 2193,
+      "wall_time_s": 142.64693355560303,
+      "turns": 3,
+      "raw_agent_output": "The user wants me to fix a bug in a Python function `magnetic_azimuth_rad` located in `scientific_examples/magnetic_azimuth_rad.py`.\nThis function is supposed to convert an azimuth from degrees to radians.\n\nThe buggy source code is:\n```python\nimport numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(azimuth_deg)\n```\n\nThe task prompt is: \"Convert a magnetic field azimuth from degrees to radians.\"\n\nThe current implementation simply returns the input value, which is incorrect for a degree-to-radian conversion.\n\nThe conversion formula is: $\\text{radians} = \\text{degrees} \\times \\frac{\\pi}{180}$.\n\nSince `numpy` is imported, I should use `numpy.deg2rad` or implement the conversion using `np.pi`.\n\nUsing `np.deg2rad` is the most idiomatic way when `numpy` is available.\n\nLet's check the visible test:\n`assert magnetic_azimuth_rad(143.5) > 0.0`\n\nIf I use `np.deg2rad(143.5)`:\n$143.5 \\times \\frac{\\pi}{180} \\approx 2.501$\n$2.501 > 0.0$, so the test passes.\n\nI will modify the function to use `np.deg2rad`.\n\nCorrected code:\n```python\nimport numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(np.deg2rad(azimuth_deg))\n```\nI should ensure the return type is `float` as specified in the signature, which `np.deg2rad` usually handles, but casting it explicitly is safe if needed.\n\nLet's use the corrected code and verify it against the visible test using `check_visible_test`.\nThe user wants me to fix a silent physical bug in a scientific Python file.\nThe file is `scientific_examples/magnetic_azimuth_rad.py`.\nThe function `magnetic_azimuth_rad` is supposed to convert an azimuth from degrees to radians.\n\nBuggy Source Code:\n```python\nimport numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(azimuth_deg)\n```\nThe current implementation just returns the input value, which is incorrect for a degree-to-radian conversion.\n\nTask Prompt: Convert a magnetic field azimuth from degrees to radians.\n\nVisible Test:\n```python\nassert magnetic_azimuth_rad(143.5) > 0.0\n```\nThis test passes with my proposed fix:\n```python\nimport numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(np.deg2rad(azimuth_deg))\n```\nLet's verify the logic. `np.deg2rad(143.5)` will return a positive value, so the visible test passes.\n\nThe fix involves using `numpy.deg2rad()` to perform the correct unit conversion.\n\nI will use the corrected code and submit the patch.\nimport numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(np.deg2rad(azimuth_deg))",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "import numpy as np\n\ndef magnetic_azimuth_rad(azimuth_deg: float) -> float:\n    return float(np.deg2rad(azimuth_deg))"
+          }
+        }
+      ],
+      "bug_type": "RAD_DEG",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "JDM-001",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "JD_MJD",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "JDM-002",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "JD_MJD",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "JDM-003",
+      "final_code": "from astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2401,
+      "wall_time_s": 159.86003351211548,
+      "turns": 4,
+      "raw_agent_output": "The user wants me to fix a silent physical bug in a Python function `exposure_midpoint_jd` located in `scientific_examples/exposure_midpoint_jd.py`.\nThe function is supposed to return an exposure midpoint as a Julian Date.\n\nThe buggy source code is:\n```python\nfrom astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.mjd)\n```\n\nThe visible test is:\n```python\nt = Time(2459345.125, format='jd', scale='tdb')\nassert exposure_midpoint_jd(t) > 0.0\n```\n\nThe function takes an `astropy.time.Time` object and returns `time_obj.mjd` cast to a float.\n\n`astropy.time.Time` objects store time in various formats, including MJD (Modified Julian Date) and JD (Julian Date).\n\nThe prompt asks to \"Return an exposure midpoint as a Julian Date.\"\n\nThe current implementation returns `time_obj.mjd`. MJD is Modified Julian Date, which is related to JD but not exactly the same. JD is the standard Julian Date.\n\nIf `time_obj` is an `astropy.time.Time` object, it should have a property or method to access the Julian Date directly, or I should convert it.\n\nLet's check how `astropy.time.Time` handles JD.\n\nIf I look at the `astropy` documentation or common usage, `Time` objects often have a `.jd` attribute or can be converted to it.\n\nIf `time_obj.mjd` is used, it returns the Modified Julian Date. If the requirement is Julian Date (JD), I should use the correct attribute.\n\nIn Astropy, `Time` objects usually have a `.jd` attribute which represents the Julian Date.\n\nLet's assume the fix is to change `time_obj.mjd` to `time_obj.jd`.\n\nI will construct the corrected file and run the visible test against it.\n\nCorrected code proposal:\n```python\nfrom astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)\n```\n\nI will use `check_visible_test` to verify this fix.\nThe user wants me to fix a silent physical bug in a scientific Python file.\nThe file is `scientific_examples/exposure_midpoint_jd.py`.\nThe function `exposure_midpoint_jd` is supposed to return an exposure midpoint as a Julian Date.\n\nBuggy source:\n```python\nfrom astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.mjd)\n```\n\nVisible test:\n```python\nt = Time(2459345.125, format='jd', scale='tdb')\nassert exposure_midpoint_jd(t) > 0.0\n```\n\nThe visible test passed when I changed `time_obj.mjd` to `time_obj.jd`.\n\nLet's analyze the difference:\n1. `mjd`: Modified Julian Date.\n2. `jd`: Julian Date.\n\nThe task prompt explicitly asks to \"Return an exposure midpoint as a Julian Date.\"\n\nIn `astropy.time.Time` objects, `.jd` provides the Julian Date, while `.mjd` provides the Modified Julian Date. Since the requirement is to return a Julian Date, using `.jd` is the correct fix for the physical/unit error.\n\nThe test passed with the proposed fix:\n```python\nfrom astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)\n```\n\nI will submit this corrected code.",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "from astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)"
+          }
+        },
+        {
+          "name": "submit_patch",
+          "args": {
+            "confidence": 1,
+            "final_code": "from astropy.time import Time\n\ndef exposure_midpoint_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)"
+          }
+        }
+      ],
+      "bug_type": "JD_MJD",
+      "vis_pass": true,
+      "oracle_pass": true,
+      "true_fix": true,
+      "silent_failure": false,
+      "abstained": false
+    },
+    {
+      "task_id": "JDM-004",
+      "final_code": "from astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)",
+      "decision": "SUBMIT",
+      "confidence": 1.0,
+      "reason": "",
+      "tokens": 2121,
+      "wall_time_s": 119.35055446624756,
+      "turns": 4,
+      "raw_agent_output": "The user wants me to fix a bug in the function `simulation_time_jd` in `scientific_examples/simulation_time_jd.py`.\nThe goal is to return the timestamp in Julian Date (JD) instead of Modified Julian Date (MJD).\n\nThe buggy code is:\n```python\nfrom astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.mjd)\n```\n\nThe function currently returns `time_obj.mjd`, which is the Modified Julian Date.\nThe task requires returning the Julian Date (JD).\n\nIn `astropy.time.Time` objects, the Julian Date is typically accessed via the `.jd` attribute, while the Modified Julian Date is accessed via `.mjd`.\n\nI need to change `time_obj.mjd` to `time_obj.jd`.\n\nLet's construct the corrected code.\n\nCorrected code:\n```python\nfrom astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)\n```\n\nI will use the `check_visible_test` tool to verify this fix before submitting the patch.\nThe user wants me to fix a bug in `scientific_examples/simulation_time_jd.py`.\nThe goal is to return the Julian Date (JD) instead of the Modified Julian Date (MJD).\n\nBuggy source:\n```python\nfrom astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.mjd)\n```\n\nThe visible test uses `astropy.time.Time` initialized with a JD value (`format='jd'`).\n`t = Time(2460001.5, format='jd', scale='tdb')`\nThe assertion is `assert simulation_time_jd(t) > 0.0`.\n\nThe current implementation returns `time_obj.mjd`.\nIf `t` is initialized with JD, accessing `.mjd` will convert it to MJD.\n\nThe task prompt explicitly states: \"Return a simulation timestamp in Julian Date rather than Modified Julian Date.\"\n\nThe fix is to change `time_obj.mjd` to `time_obj.jd`.\n\nI already tested this fix using `check_visible_test` in the previous turn, and it passed.\n\nCorrected code:\n```python\nfrom astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)\n```\n\nI will now submit this patch.",
+      "tool_calls": [
+        {
+          "name": "check_visible_test",
+          "args": {
+            "final_code": "from astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)"
+          }
+        },
+        {
+          "name": "submit_patch",
+          "args": {
+            "confidence": 1,
+            "final_code": "from astropy.time import Time\n\ndef simulation_time_jd(time_obj: Time) -> float:\n    return float(time_obj.jd)"
+          }
+        }
+      ],
+      "bug_type": "JD_MJD",
+      "vis_pass": true,
+      "oracle_pass": true,
+      "true_fix": true,
+      "silent_failure": false,
+      "abstained": false
+    },
+    {
+      "task_id": "UNT-001",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 1045,
+      "wall_time_s": 67.22721695899963,
+      "turns": 1,
+      "raw_agent_output": "The user wants me to fix a bug in the function `mass_in_kg` in `scientific_examples/mass_in_kg.py`.\nThe function is supposed to convert a mass quantity to kilograms.\nThe input `quantity` is expected to be an Astropy Quantity object, as suggested by the visible test (`q = 1000.0 * u.g`).\nThe current implementation is:\n```python\ndef mass_in_kg(quantity) -> float:\n    return float(quantity.value)\n```\nThis implementation just returns the numerical value of the quantity without performing any unit conversion.\n\nThe visible test uses grams (`u.g`) and asserts that the result is greater than 0.0.\nIf `q = 1000.0 * u.g`, then `quantity.value` is `1000.0`.\nThe current function returns `1000.0`.\nIf the function is supposed to return the mass in kilograms, then 1000 grams should be 1.0 kg.\n\nThe bug is a silent physical/unit error: the function does not perform the unit conversion from the input unit to kilograms.\n\nTo fix this, I need to use Astropy's capabilities to convert the quantity to kilograms.\n\nThe correct implementation should look something like:\n```python\nimport astropy.units as u\n\ndef mass_in_kg(quantity) -> float:\n    return quantity.to(u.kg).value\n```\nThis converts the quantity to kilograms and then extracts the numerical value as a float.\n\nI will now construct the complete corrected file and use `check_visible_test`.\nimport astropy.units as u\n\ndef mass_in_kg(quantity) -> float:\n    return quantity.to(u.kg).value",
+      "tool_calls": [],
+      "bug_type": "UNIT",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "UNT-002",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "",
+      "tokens": 1152,
+      "wall_time_s": 83.98317241668701,
+      "turns": 1,
+      "raw_agent_output": "The user wants me to fix a silent physical bug in the function `distance_in_m` located in `scientific_examples/distance_in_m.py`.\nThe function is supposed to convert a distance quantity (which uses `astropy.units`) to meters.\n\nThe buggy code is:\n```python\nimport astropy.units as u\n\ndef distance_in_m(quantity) -> float:\n    return float(quantity.value)\n```\n\nThe visible test is:\n```python\nq = 2.5 * u.km\nassert distance_in_m(q) > 0.0\n```\n\nThe function currently returns `float(quantity.value)`. If `quantity` is `2.5 * u.km`, `quantity.value` is `2.5`, and the function returns `2.5`.\nThe task requires converting the distance to meters.\n\nIf the input is in kilometers (`u.km`), the output should be in meters.\n$2.5 \\text{ km} = 2500 \\text{ m}$.\n\nThe current implementation ignores the units and just returns the numerical value, which is incorrect for a unit conversion function.\n\nTo fix this, I need to use `astropy.units` to perform the conversion.\n\nIf `quantity` is an `astropy.units` object, I should multiply it by the conversion factor or use the `.to()` method.\n\nThe `.to()` method is the standard way in Astropy to convert units.\n\nCorrect implementation should be:\n```python\nimport astropy.units as u\n\ndef distance_in_m(quantity) -> float:\n    return quantity.to(u.m).value\n```\n\nLet's verify this with the visible test:\nInput `q = 2.5 * u.km`.\n`q.to(u.m)` results in `2500.0 * u.m`.\n`.value` extracts the numerical value, `2500.0`.\n`2500.0 > 0.0` is True. The test passes.\n\nI will now construct the complete corrected file and submit the patch.\nimport astropy.units as u\n\ndef distance_in_m(quantity) -> float:\n    return quantity.to(u.m).value",
+      "tool_calls": [],
+      "bug_type": "UNIT",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "UNT-003",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "UNIT",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "UNT-004",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "UNIT",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "FRM-001",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "FRAME",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "FRM-002",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "FRAME",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "FRM-003",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "FRAME",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "FRM-004",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "FRAME",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    },
+    {
+      "task_id": "FRM-005",
+      "final_code": "",
+      "decision": "ABSTAIN",
+      "confidence": 0.0,
+      "reason": "agent timed out after 180.0s",
+      "tokens": 0,
+      "wall_time_s": 180.0,
+      "turns": 0,
+      "raw_agent_output": "",
+      "tool_calls": [],
+      "bug_type": "FRAME",
+      "vis_pass": false,
+      "oracle_pass": false,
+      "true_fix": false,
+      "silent_failure": false,
+      "abstained": true
+    }
+  ]
+}
